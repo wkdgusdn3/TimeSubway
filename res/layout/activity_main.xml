@@ -7,12 +7,25 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.timesubway.MainActivity" >
-    
+
     <Spinner
         android:id="@+id/spinner"
-        android:layout_marginTop="50dp"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content" />
-    
+
+    <Spinner
+        android:id="@+id/departure"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="100dp" />
+
+    <Spinner
+        android:id="@+id/destination"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="100dp" />
 
 </RelativeLayout>

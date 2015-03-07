@@ -4,6 +4,9 @@ int anim abc_slide_in_bottom 0x7f040002
 int anim abc_slide_in_top 0x7f040003
 int anim abc_slide_out_bottom 0x7f040004
 int anim abc_slide_out_top 0x7f040005
+int array line1 0x7f0c0001
+int array line2 0x7f0c0002
+int array lines 0x7f0c0000
 int attr actionBarDivider 0x7f010015
 int attr actionBarItemBackground 0x7f010016
 int attr actionBarPopupTheme 0x7f01000f
@@ -347,7 +350,7 @@ int id action_menu_presenter 0x7f090006
 int id action_mode_bar 0x7f09002e
 int id action_mode_bar_stub 0x7f09002d
 int id action_mode_close_button 0x7f090020
-int id action_settings 0x7f090040
+int id action_settings 0x7f090042
 int id activity_chooser_view_content 0x7f090021
 int id always 0x7f090014
 int id beginning 0x7f09001b
@@ -355,6 +358,8 @@ int id checkbox 0x7f090029
 int id collapseActionView 0x7f090015
 int id decor_content_parent 0x7f09002f
 int id default_activity_button 0x7f090024
+int id departure 0x7f090040
+int id destination 0x7f090041
 int id dialog 0x7f090019
 int id disableHome 0x7f09000d
 int id dropdown 0x7f09001a
@@ -425,7 +430,7 @@ int layout abc_search_view 0x7f030015
 int layout abc_simple_dropdown_hint 0x7f030016
 int layout activity_main 0x7f030017
 int layout support_simple_spinner_dropdown_item 0x7f030018
-int menu main 0x7f0c0000
+int menu main 0x7f0d0000
 int string abc_action_bar_home_description 0x7f0a0001
 int string abc_action_bar_home_description_format 0x7f0a0005
 int string abc_action_bar_home_subtitle_description_format 0x7f0a0006
