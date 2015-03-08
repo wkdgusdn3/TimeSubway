@@ -1,8 +1,11 @@
 package com.example.timesubway;
 
+import java.util.Currency;
+
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,6 +26,7 @@ public class MainActivity extends ActionBarActivity {
 	int minute;
 	int second = 0;
 	Handler handler;
+	Thread thread1;
 
 	ArrayAdapter<String> lines_adapter;
 	ArrayAdapter<String> line1_adapter;
@@ -42,7 +46,7 @@ public class MainActivity extends ActionBarActivity {
 		count = (TextView)findViewById(R.id.count);
 		timer = (TextView)findViewById(R.id.timer);
 		start = (Button)findViewById(R.id.start);	
-		
+
 		handler = new Handler();
 
 		// spinner 등록
@@ -103,32 +107,77 @@ public class MainActivity extends ActionBarActivity {
 			}
 		});	
 
+		// 출발지 선택했을 떄
 		departure_sp.setOnItemSelectedListener(new OnItemSelectedListener() {
 			@Override
 			public void onItemSelected(AdapterView<?> parent, View arg1,
 					int position, long id) {
 
-				station_count = (int)Math.abs(departure_sp.getSelectedItemId() - destination_sp.getSelectedItemId());
+				int total_station = departure_sp.getAdapter().getCount();
+				int departure_count = (int)departure_sp.getSelectedItemId();
+				int destination_count = (int)destination_sp.getSelectedItemId();
 
+				if(lines_sp.getSelectedItemId() == 1) {	// 2호선 일 때만
+					if(departure_count > destination_count) {
+						if(departure_count - destination_count > destination_count + (total_station - departure_count)) {
+							station_count = destination_count + (total_station - departure_count);
+						} else {
+							station_count = departure_count - destination_count;
+						}
+					} else {
+						if(destination_count - departure_count > departure_count + (total_station - destination_count)) {
+							station_count = departure_count + (total_station - destination_count);
+						} else {
+							station_count = destination_count - departure_count;
+						}
+					}
+				} else {
+					station_count = (int)Math.abs(departure_sp.getSelectedItemId() - destination_sp.getSelectedItemId());					
+				}
+				
 				count.setText("출발 : " + departure_sp.getSelectedItem().toString() + 
 						"\n도착 : " + destination_sp.getSelectedItem().toString() +
-						"\n역 개수 : " + station_count);
+						"\n역 개수 : " + station_count +
+						"\n예상시간 : " + station_count * 2 + "분");
 			}
 			@Override
 			public void onNothingSelected(AdapterView<?> parent) {
 			}
 		});
 
+
+		// 도착지 선택했을 때
 		destination_sp.setOnItemSelectedListener(new OnItemSelectedListener() {
 			@Override
 			public void onItemSelected(AdapterView<?> parent, View arg1,
 					int position, long id) {
 
-				station_count = (int)Math.abs(departure_sp.getSelectedItemId() - destination_sp.getSelectedItemId());
+				int total_station = departure_sp.getAdapter().getCount();
+				int departure_count = (int)departure_sp.getSelectedItemId();
+				int destination_count = (int)destination_sp.getSelectedItemId();
 
+				if(lines_sp.getSelectedItemId() == 1) {	// 2호선 일 때만
+					if(departure_count > destination_count) {
+						if(departure_count - destination_count > destination_count + (total_station - departure_count)) {
+							station_count = destination_count + (total_station - departure_count);
+						} else {
+							station_count = departure_count - destination_count;
+						}
+					} else {
+						if(destination_count - departure_count > departure_count + (total_station - destination_count)) {
+							station_count = departure_count + (total_station - destination_count);
+						} else {
+							station_count = destination_count - departure_count;
+						}
+					}
+				} else {
+					station_count = (int)Math.abs(departure_sp.getSelectedItemId() - destination_sp.getSelectedItemId());					
+				}
+				
 				count.setText("출발 : " + departure_sp.getSelectedItem().toString() + 
 						"\n도착 : " + destination_sp.getSelectedItem().toString() +
-						"\n역 개수 : " + station_count);
+						"\n역 개수 : " + station_count +
+						"\n예상시간 : " + station_count * 2 + "분");
 			}
 			@Override
 			public void onNothingSelected(AdapterView<?> parent) {
@@ -141,10 +190,19 @@ public class MainActivity extends ActionBarActivity {
 			public void onClick(View v) {
 
 				second = 0;
-
 				minute = station_count * 2;
 
-				Thread thread1 = new Thread(new Runnable() {
+				Log.v("wkdgusdn3", "" + 1);
+				if(thread1 != null && thread1.isAlive()) {
+					Log.v("wkdgusdn3", "" + 2);
+					thread1.interrupt();
+					Log.v("wkdgusdn3", "" + 3);
+				}
+				else {
+					Log.v("wkdgusdn3", "" + 4);
+				}
+					
+				thread1 = new Thread(new Runnable() {
 					public void run() {
 
 						while(minute != 0 || second != 0) {
@@ -154,7 +212,7 @@ public class MainActivity extends ActionBarActivity {
 							} catch(Exception e) {
 								e.printStackTrace();
 							}
-							
+
 							if(second == 0) {
 								minute--;
 								second = 60;
@@ -162,17 +220,42 @@ public class MainActivity extends ActionBarActivity {
 
 							handler.post(new Runnable() {
 								public void run() {
-									timer.setText("" + minute + " 분 " + second + " 초 남았습니다.");		
+									int departure_count = (int)departure_sp.getSelectedItemId();
+									int destination_count = (int)destination_sp.getSelectedItemId();
+									int count = (station_count - minute/2);
+									
+									Log.v("wkdgusdn3", "" + station_count  + " " + minute + " " + count);
+									
+									if(departure_sp.getSelectedItemId() < destination_sp.getSelectedItemId()) {
+										timer.setText("" + minute + " 분 " + second + " 초 남았습니다." +
+												"\n 현재역 : " + departure_sp.getItemAtPosition(departure_count + count));	
+									} else {
+										timer.setText("" + minute + " 분 " + second + " 초 남았습니다." +
+												"\n 현재역 : " + destination_sp.getItemAtPosition(departure_count - count));	
+									}
 								}
 							});
-							
+
 							second--;
 						}
+						
+						handler.post(new Runnable() {
+							public void run() {
+								timer.setText("도착했습니다.");								
+							}
+						});
 					}
 				}); 
+				
 				thread1.start();
+					
+				
 			}
 		});
+
+	}
+
+	void calCount() {
 
 	}
 
